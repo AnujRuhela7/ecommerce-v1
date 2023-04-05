@@ -1,0 +1,148 @@
+<% layout('./layout/boilerplate') -%>
+
+<div class="">
+
+  <div class="row">
+    <div class="col-lg-4 col-md-4 ">
+      <img
+        class="img-fluid rounded"
+        style="margin:1rem"
+        src="<%=product.img%>"
+        alt="<%=product.name%>"
+        srcset=""
+      />
+    </div>
+    
+    <div class="col-lg-7 col-md-7" style="margin:1rem">
+      <div class="row">
+        <div class="col-lg-9 col-md-9">
+          <h1><%=product.name%></h1>
+        </div>
+        <div class="col-lg-1 col-md-1">
+          <a
+            href="/products/<%=product._id%>/edit"
+            class="btn btn-sm btn-secondary"
+          >Update
+          </a>
+        </div>
+        <div class="col-lg-1 col-md-1">
+          <form
+          action="/products/<%=product._id%>?_method=DELETE"
+          method="post"
+          class="d-inline"
+          >
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description-tab-pane" 
+                      type="button" role="tab" aria-controls="description-tab-pane" aria-selected="true">Description</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews-tab-pane" type="button" 
+                      role="tab" aria-controls="reviews-tab-pane" aria-selected="false">Reviews</button>
+            </li>
+          </ul>
+          <div class="tab-content container" id="myTabContent">
+            <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab" 
+                        tabindex="0">
+              <div class="row">
+                <p><H4>Price : $ <%=product.price%></H4></p>
+              </div>
+              <div class="row">
+                <p>
+                  <H5>Description</H5>
+                    <strong><%=product.desc%></strong>
+                </p>
+              </div>
+            </div>
+          <div class="tab-pane fade" id="reviews-tab-pane" role="tabpanel" aria-labelledby="reviews-tab" tabindex="0">
+            <br>
+            <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Add Review
+                  </button>
+                </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <form action="/products/<%= product._id %>/review" method="post">
+                        <div class="mb-3">
+                          <h5>Ratings : </h5>
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                          <input type="radio" class="btn-check ratingBtns" name="rating" id="btnradio1" value="1" autocomplete="off" checked>
+                          <label class="btn btn-outline-primary" for="btnradio1">1</label>
+                        
+                          <input type="radio" class="btn-check ratingBtns" name="rating" id="btnradio2" value="2" autocomplete="off">
+                          <label class="btn btn-outline-primary" for="btnradio2">2</label>
+                        
+                          <input type="radio" class="btn-check ratingBtns" name="rating" id="btnradio3" value="3" autocomplete="off">
+                          <label class="btn btn-outline-primary" for="btnradio3">3</label>
+
+                          <input type="radio" class="btn-check ratingBtns" name="rating" id="btnradio4" value="4" autocomplete="off">
+                          <label class="btn btn-outline-primary" for="btnradio4">4</label>
+
+                          <input type="radio" class="btn-check ratingBtns" name="rating" id="btnradio5" value="5" autocomplete="off">
+                          <label class="btn btn-outline-primary" for="btnradio5">5</label>
+                        </div>
+                        </div>
+              
+                        <div class="mb-3">
+                          <label for="comment" class="form-label">Comment</label>
+                          <textarea
+                            class="form-control"
+                            name="comment"
+                            id="comment"
+                            rows="3"
+                          ></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-sm">Add Review</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  <br>
+              <div class="card">
+                <h5 class="card-header">Customer Reviews</h5>
+                  <div class="card-body">               
+            
+                    <% for(let review of product.review){ %>
+            
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-9"><h5 class="card-title me-auto" style="display: inline;">Ratings : <%= review.rating%> <img src="https://img.icons8.com/emoji/48/null/star-emoji.png" height="22px" /></h5></div>
+                            <div class="col-md-1"><button class="btn btn-sm btn-primary">Edit</button></div>
+                            <div class="col-md-1"><form
+                              action="/products/<%=product._id%>/review/<%=review._id%>?_method=DELETE"
+                              method="post"
+                              class="d-inline"
+                             >
+                             <button class="btn btn-sm btn-danger">Delete</button>
+                             </form></div>
+                          </div>
+                          <div class="row"><p class="card-text"><%= review.comment %></p></div>
+              
+                        </div>
+                      </div>
+                      <br>
+                      
+                    <% } %>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+          
