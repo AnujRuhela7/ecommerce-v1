@@ -1,6 +1,8 @@
 const express = require("express");
 const Product = require("../models/Product");
 const router = express.Router();
+const Review = require("../models/Review");
+const { isLoggedIn } = require("../middleware");
 
 // Get All the Products
 router.get("/products", async (req, res) => {
@@ -17,24 +19,19 @@ router.get("/products/new", async (req, res) => {
 router.post("/products", async (req, res) => {
   const { name, img, desc, price } = req.body;
   await Product.create({ name, img, desc, price });
+  req.flash("success", "Your product has been created sucessfully");
   res.redirect("/products");
 });
 
 // Show a single product
-router.get("/products/:productid", async (req, res) => {
+router.get("/products/:productid", isLoggedIn, async (req, res) => {
   const { productid } = req.params;
   const product = await Product.findById(productid).populate("review");
   res.render("./products/show", { product });
 });
 
-router.post("/products", async (req, res) => {
-  const { name, img, desc, price } = req.body; // Data is destructured from the submitted form, and we get the data from req.body when we submit a form
-  await Product.create({ name, img, desc, price }); // create method adds the fields in the db
-  res.redirect("/products");
-});
-
 //  Get the edit form
-router.get("/products/:productid/edit", async (req, res) => {
+router.get("/products/:productid/edit", isLoggedIn, async (req, res) => {
   const { productid } = req.params;
 
   const product = await Product.findById(productid);
@@ -49,6 +46,8 @@ router.patch("/products/:productid", async (req, res) => {
   const { productid } = req.params;
 
   await Product.findByIdAndUpdate(productid, { name, img, price, desc });
+
+  req.flash("success", "Your product has been updated.");
 
   res.redirect(`/products/${productid}`);
 });
